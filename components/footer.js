@@ -64,7 +64,7 @@ class DuckFooter extends HTMLElement {
                 <div class="footer-container">
                     <div>
                         <div class="footer-logo">
-                            <span>🦆 Duck Dating Quackery</span>
+                            <span>🦆 Duck Dating Apps</span>
                         </div>
                         <p class="text-gray-300">Real-Time Speed Dating Events for meaningful connections.</p>
                     </div>
@@ -100,7 +100,7 @@ class DuckFooter extends HTMLElement {
                         </div>
                     </div>
                     <div class="copyright">
-                        © 2023 Duck Dating Quackery — Real-Time Speed Dating Events
+                        © 2026 Duck Dating Apps — Real-Time Speed Dating Events
                     </div>
                 </div>
             </footer>

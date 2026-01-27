@@ -24,7 +24,13 @@ class DuckNav extends HTMLElement {
                     color: #2F2F2F;
                     display: flex;
                     align-items: center;
-                    gap: 0.5rem;
+                    gap: 0.6rem;
+                    text-decoration: none;
+                }
+                .logo img {
+                    height: 42px;
+                    width: auto;
+                    display: block;
                 }
                 .nav-links {
                     display: flex;
@@ -34,12 +40,16 @@ class DuckNav extends HTMLElement {
                     color: #2F2F2F;
                     font-weight: 500;
                     transition: color 0.2s;
+                    text-decoration: none;
                 }
                 .nav-link:hover {
                     color: #FF9A3C;
                 }
                 .mobile-menu-btn {
                     display: none;
+                    background: none;
+                    border: none;
+                    cursor: pointer;
                 }
                 @media (max-width: 768px) {
                     .nav-links {
@@ -53,14 +63,17 @@ class DuckNav extends HTMLElement {
             <nav>
                 <div class="nav-container">
                     <a href="/" class="logo">
-                        <span>🦆 Duck Dating Quackery</span>
+                        <img src="/images/DDA-logo.jpg" alt="Duck Dating Apps Logo">
+                        <span>Duck Dating Apps</span>
                     </a>
+
                     <div class="nav-links">
                         <a href="/about" class="nav-link">About</a>
                         <a href="/events" class="nav-link">Events</a>
                         <a href="/how-it-works" class="nav-link">How It Works</a>
                         <a href="/contact" class="nav-link">Contact</a>
                     </div>
+
                     <button class="mobile-menu-btn">
                         <i data-feather="menu"></i>
                     </button>
