@@ -4,231 +4,147 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blind Duck Dating</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f4efe8;
-      color: #2f2f2f;
-    }
 
-    .chaos-gradient {
-      background: linear-gradient(135deg, #ffd36e 0%, #ffb14a 45%, #ff8b4e 100%);
-    }
+  <link rel="stylesheet" href="/styles.css" />
 
-    .sticker {
-      transform: rotate(-3deg);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
-
-    .sticker-2 {
-      transform: rotate(3deg);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
-
-    .scribble {
-      position: relative;
-      display: inline-block;
-    }
-
-    .scribble::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -4px;
-      width: 100%;
-      height: 10px;
-      background: rgba(255, 91, 146, 0.25);
-      z-index: -1;
-      border-radius: 999px;
-    }
-
-    .grid-bg {
-      background-image:
-        linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
-      background-size: 28px 28px;
-    }
-
-    .blob {
-      border-radius: 36% 64% 64% 36% / 41% 34% 66% 59%;
-    }
-
-    .cta-shadow {
-      box-shadow: 0 14px 30px rgba(0,0,0,0.12);
-    }
-  </style>
+  <script src="/components/header.js" defer></script>
+  <script src="/components/footer.js" defer></script>
 </head>
-<body>
+<body data-page="home">
 
-  <!-- NAV -->
-  <header class="sticky top-0 z-50 bg-[#f4efe8]/90 backdrop-blur border-b border-black/5">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-3">
-        <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-black/10 bg-pink-200">
-          <img src="/images/DDA-logo.jpg" alt="Blind Duck Dating logo" class="w-full h-full object-cover">
+  <duck-header></duck-header>
+
+<!-- HERO -->
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 grid-bg opacity-40 pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-6 pt-14 pb-20 md:pt-20 md:pb-2 relative">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+      <!-- LEFT -->
+      <div>
+        <div class="inline-flex items-center gap-2 bg-white border border-black/10 rounded-full px-4 py-2 text-sm font-bold mb-6"
+             style="transform: rotate(-3deg); box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+          <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
+          IN-PERSON DATING EVENTS IN BERLIN
         </div>
-        <div>
-          <div class="text-2xl md:text-3xl font-black tracking-tight leading-none">DUCK DATING</div>
-          <div class="text-2xl md:text-3xl font-black tracking-tight leading-none">APPS</div>
-        </div>
-      </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-sm font-semibold">
-        <a href="/index.html" class="hover:opacity-70">WTF is this?</a>
-        <a href="/events.html" class="hover:opacity-70">Events</a>
-        <a href="/faq.html" class="hover:opacity-70">FAQ’s</a>
-        <a href="/contact.html" class="hover:opacity-70">Contact</a>
-      </nav>
-    </div>
-  </header>
+        <h1 class="text-5xl md:text-7xl font-black leading-[0.95] tracking-tight max-w-xl">
+          Tired of ducking dating apps?!?
+          <span class="block text-[#ff5b92]">Meet people IRL</span>
+        </h1>
 
-  <!-- HERO -->
-  <section class="relative overflow-hidden">
-    <div class="absolute inset-0 grid-bg opacity-40 pointer-events-none"></div>
-
-    <div class="max-w-7xl mx-auto px-6 pt-14 pb-20 md:pt-20 md:pb-2 relative">
-      <div class="grid lg:grid-cols-2 gap-12 items-center">
-
-        <!-- LEFT -->
-        <div>
-          <div class="inline-flex items-center gap-2 bg-white border border-black/10 rounded-full px-4 py-2 text-sm font-bold sticker mb-6">
-            <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
-            IN-PERSON DATING EVENTS IN BERLIN
-          </div>
-
-          <h1 class="text-5xl md:text-7xl font-black leading-[0.95] tracking-tight max-w-xl">
-            Tired of ducking dating apps?!?
-            <span class="block text-[#ff5b92]">Meet people IRL</span>
-          </h1>
-
-          <p class="mt-6 text-lg md:text-2xl font-medium max-w-2xl leading-snug">
+        <p class="mt-6 text-lg md:text-2xl font-medium max-w-2xl leading-snug">
           _uck Dating Apps - brings people together (again),
-            <span class="scribble font-extrabold">face-to-face</span>,
-            not screen-to-screen.
+          <span class="scribble font-extrabold">face-to-face</span>,
+          not screen-to-screen.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3 md:gap-4">
+          <div class="bg-[#ffd8e7] rounded-full px-4 py-2 font-semibold text-sm shadow-md"
+               style="transform: rotate(-4deg);">
+            NO ENDLESS SWIPING
+          </div>
+
+          <div class="bg-[#d7f0cb] rounded-full px-4 py-2 font-semibold text-sm shadow-md ml-2"
+               style="transform: rotate(3deg);">
+            REAL VIBE CHECKS
+          </div>
+
+          <div class="bg-[#d7e7f5] rounded-full px-4 py-2 font-semibold text-sm shadow-md"
+               style="transform: rotate(-2deg);">
+            NO SPAMMERS AND BOTS
+          </div>
+
+          <div class="bg-[#f9df9b] rounded-full px-4 py-2 font-semibold text-sm shadow-md md:-ml-2"
+               style="transform: rotate(4deg);">
+            NO AWKWARD CONTACT EXCHANGE
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="relative">
+        <div class="absolute -top-8 -left-6 w-28 h-28 bg-pink-300/50 blob blur-xl"></div>
+        <div class="absolute -bottom-10 right-0 w-36 h-36 bg-yellow-300/50 blob blur-xl"></div>
+
+        <div class="relative bg-white border border-black/10 rounded-[2rem] p-4 md:p-6 shadow-2xl">
+          <img
+            src="/images/BDD logo.png"
+            alt="Blind Duck Dating visual explanation"
+            class="w-full h-auto rounded-[1.5rem] object-cover"
+          />
+
+          <div class="absolute -top-4 -right-4 bg-[#2f2f2f] text-white px-4 py-3 rounded-2xl font-black text-sm md:text-base shadow-md"
+               style="transform: rotate(3deg);">
+            THIS IS DATING <br> IN PERSON
+          </div>
+
+          <div class="absolute -bottom-4 -left-4 bg-[#ff5b92] text-white px-4 py-3 rounded-2xl font-black text-sm md:text-base shadow-md"
+               style="transform: rotate(-4deg);">
+            OUR FOCUS: FIND YOU A COMPATIBLE GROUP
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+  <!-- OUR EVENTS -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="max-w-3xl">
+        <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ff5b92]">Our events</p>
+        <h2 class="mt-3 text-4xl md:text-6xl font-black tracking-tight">
+          We cater to <br>
+          <span class="text-[#ff5b92]">all relationship styles</span>, <br>
+          and <span class="text-[#ff8b4e]">orientations</span>.
+        </h2>
+        <p class="mt-5 text-lg md:text-xl text-black/70 max-w-2xl">
+          Two ways to meet people in person. Same real-life energy, different format.
+        </p>
+      </div>
+
+      <div class="mt-10 grid md:grid-cols-2 gap-6">
+        <a href="https://poly-speed-dating.onrender.com/" class="relative block rounded-[2rem] bg-[#f8f4ee] p-6 pt-7 md:p-8 border border-black/10 shadow-md hover:translate-y-[-4px] transition">
+          <img
+            src="/images/PSD logo.png"
+            alt="Poly Speed Dating logo"
+            class="absolute top-5 right-5 w-10 h-10 md:top-6 md:right-6 md:w-14 md:h-14 object-contain"
+          />
+          <p class="text-sm font-black uppercase tracking-[0.16em] text-[#ff5b92] pr-12 md:pr-0">📍 Near Treptower Park</p>
+          <h3 class="mt-4 text-2xl md:text-3xl font-black md:pr-20">Poly Speed Dating</h3>
+          <p class="mt-3 text-black/70 text-lg">
+            A moderated in-person event for polyamorous people to meet, connect, and explore mutual interest. Organised every few months.
           </p>
+          <span class="mt-6 inline-block font-bold underline underline-offset-4">Open PSD Website</span>
+        </a>
 
-      
-    
-          <div class="mt-8 flex flex-wrap gap-3">
-            <div class="bg-[#ffd8e7] rounded-full px-4 py-2 font-semibold text-sm sticker">NO ENDLESS SWIPING</div>
-            <div class="bg-[#d7f0cb] rounded-full px-4 py-2 font-semibold text-sm sticker-2">REAL VIBE CHECKS</div>
-            <div class="bg-[#d7e7f5] rounded-full px-4 py-2 font-semibold text-sm sticker">NO SPAMMERS AND BOTS</div>
-            <div class="bg-[#f9df9b] rounded-full px-4 py-2 font-semibold text-sm sticker-2">NO AWKWARD CONTACT EXCHANGE</div>
-          </div>
-        </div>
-
-        <!-- RIGHT -->
-        <div class="relative">
-          <div class="absolute -top-8 -left-6 w-28 h-28 bg-pink-300/50 blob blur-xl"></div>
-          <div class="absolute -bottom-10 right-0 w-36 h-36 bg-yellow-300/50 blob blur-xl"></div>
-
-          <div class="relative bg-white border border-black/10 rounded-[2rem] p-4 md:p-6 shadow-2xl">
-            <img
-              src="/images/BDD logo.png"
-              alt="Blind Duck Dating visual explanation"
-              class="w-full h-auto rounded-[1.5rem] object-cover"
-            />
-
-            <div class="absolute -top-4 -right-4 bg-[#2f2f2f] text-white px-4 py-3 rounded-2xl font-black text-sm md:text-base sticker-2">
-              THIS IS DATING <br> IN PERSON
-            </div>
-
-            <div class="absolute -bottom-4 -left-4 bg-[#ff5b92] text-white px-4 py-3 rounded-2xl font-black text-sm md:text-base sticker">
-           OUR FOCUS: FIND YOU A COMPATABLE GROUP
-            </div>
-          </div>
-        </div>
+        <a href="https://forms.gle/iKNUU8ozepe3AWfb6" class="relative block rounded-[2rem] bg-[#f8f4ee] p-6 pt-7 md:p-8 border border-black/10 shadow-md hover:translate-y-[-4px] transition">
+          <img
+            src="/images/BDD logo.png"
+            alt="Blind Dating Apps logo"
+            class="absolute top-5 right-5 w-10 h-10 md:top-6 md:right-6 md:w-14 md:h-14 object-contain"
+          />
+          <p class="text-sm font-black uppercase tracking-[0.16em] text-[#ff5b92] pr-12 md:pr-0">📍 Throughout Berlin</p>
+          <h3 class="mt-4 text-2xl md:text-3xl font-black md:pr-20">Blind Duck Dating</h3>
+          <p class="mt-3 text-black/70 text-lg">
+            Curated face-to-face meeting with 8 people. We make sure to connect you to like-minded individuals with similar interests. Ongoing events every few weeks. Free registry.
+          </p>
+          <span class="mt-6 inline-block font-bold underline underline-offset-4">Register to the Dating Pool</span>
+          <br>
+          <span class="text-sm italic">Deadline 4<sup>th</sup> April 2026</span>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- QUICK EXPLANATION -->
-  <!-- <section class="py-12">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="chaos-gradient rounded-[2rem] p-8 md:p-12 text-center shadow-xl">
-        <p class="text-sm md:text-base font-black uppercase tracking-[0.2em] text-black/70">
-             </p>
-        <h2 class="mt-4 text-3xl md:text-5xl font-black tracking-tight">
-            Frustrated with finding new people? <br><span class="text-[#e6761f]">We got you covered! </span>
-        </h2>
-        <p class="mt-5 max-w-3xl mx-auto text-lg md:text-2xl font-medium leading-relaxed">
-          You apply. We hand-pick the group, that matches your interests. You meet everyone live.
-          Then you choose who you’d like to stay in connect with;
-          <span class="font-black">romantically or socially.</span>
-        </p>
-      </div>
-    </div>
-  </section> -->
-
-<!-- OUR EVENTS -->
-<section class="py-20 bg-white">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="max-w-3xl">
-      <p class="text-sm font-black uppercase tracking-[0.2em] text-[#ff5b92]">Our events</p>
-      <h2 class="mt-3 text-4xl md:text-6xl font-black tracking-tight">
-        We cater to <br>
-        <span class="text-[#ff5b92]">all relationship styles</span>, <br>
-        and <span class="text-[#ff8b4e]">orientations</span>.
-      </h2>
-      <p class="mt-5 text-lg md:text-xl text-black/70 max-w-2xl">
-        Two ways to meet people in person. Same real-life energy, different format.
-      </p>
-    </div>
-
-    <div class="mt-10 grid md:grid-cols-2 gap-6">
-      <a href="https://poly-speed-dating.onrender.com/" class="relative block rounded-[2rem] bg-[#f8f4ee] p-6 pt-7 md:p-8 border border-black/10 shadow-md hover:translate-y-[-4px] transition">
-        <img
-          src="/images/PSD logo.png"
-          alt="Poly Speed Dating logo"
-          class="absolute top-5 right-5 w-10 h-10 md:top-6 md:right-6 md:w-14 md:h-14 object-contain"
-        />
-        <p class="text-sm font-black uppercase tracking-[0.16em] text-[#ff5b92] pr-12 md:pr-0">📍 Near Treptower Park</p>
-        <h3 class="mt-4 text-2xl md:text-3xl font-black md:pr-20">Poly Speed Dating</h3>
-        <p class="mt-3 text-black/70 text-lg">
-          A moderated in-person event for polyamorous people to meet, connect, and explore mutual interest. Organised every few months.
-        </p>
-        <span class="mt-6 inline-block font-bold underline underline-offset-4">Open PSD Website</span>
-      </a>
-
-      <a href="https://forms.gle/iKNUU8ozepe3AWfb6" class="relative block rounded-[2rem] bg-[#f8f4ee] p-6 pt-7 md:p-8 border border-black/10 shadow-md hover:translate-y-[-4px] transition">
-        <img
-          src="/images/BDD logo.png"
-          alt="Blind Dating Apps logo"
-          class="absolute top-5 right-5 w-10 h-10 md:top-6 md:right-6 md:w-14 md:h-14 object-contain"
-        />
-        <p class="text-sm font-black uppercase tracking-[0.16em] text-[#ff5b92] pr-12 md:pr-0">📍 Throughout Berlin</p>
-        <h3 class="mt-4 text-2xl md:text-3xl font-black md:pr-20">Blind Duck Dating</h3>
-        <p class="mt-3 text-black/70 text-lg">
-          Curated face-to-face meeting with 8 people. We make sure to connect you to like-minded individuals with similar interests. Ongoing events every few weeks. Free registry.
-        </p>
-        <span class="mt-6 inline-block font-bold underline underline-offset-4">Register to the Dating Pool</span>
-        <span><i>
-          <br>
-          <span><i class="text-sm italic">Deadline <span class="inline-block">4<sup class="text-xxs">th</sup> April 2026</span></i></span>
-      </a>
-    </div>
-  </div>
-</section>
-
-  <!-- FOOTER -->
-  <footer class="py-10 border-t border-black/10">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-      <div>
-        <div class="font-black text-2xl">DUCK DATING APPS</div>
-        <div class="text-black/60 mt-1">In-person dating events for people tired of dating apps.</div>
-      </div>
-
-      <div class="flex gap-6 text-sm text-black/60">
-        <a href="/events.html">Events</a>
-        <a href="/faq.html">FAQ’s</a>
-        <a href="/contact.html">Contact</a>
-      </div>
-    </div>
-  </footer>
+  <duck-footer></duck-footer>
 
 </body>
 </html>
