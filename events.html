@@ -25,18 +25,12 @@
     <div class="absolute inset-0 grid-bg opacity-40 pointer-events-none"></div>
 
     <div class="max-w-6xl mx-auto px-6 pt-16 pb-12 md:pt-20 md:pb-14 relative text-center">
-      <div class="inline-flex items-center gap-2 bg-white border border-black/10 rounded-full px-4 py-2 text-sm font-bold sticker mb-6">
-        <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
-        UPCOMING EVENTS
-      </div>
+ 
 
       <h1 class="text-5xl md:text-7xl font-black tracking-tight leading-[0.95]">
-        Events
+        Calendar 'n' Events
       </h1>
 
-      <p class="mt-6 text-lg md:text-2xl text-black/70 max-w-3xl mx-auto">
-        Explore upcoming events, open a dedicated event page, and jump straight to the application link.
-      </p>
     </div>
   </section>
 
@@ -163,7 +157,7 @@
 
     listEl.innerHTML = events.map(event => `
       <a
-        href="/events/event.html?slug=${encodeURIComponent(event.slug)}"
+    href="./event.html?slug=${encodeURIComponent(event.slug)}"
         class="dda-event-card"
         style="background:${event.cardBg || "#ffffff"};"
       >
@@ -308,7 +302,7 @@ return `
               ${EVENTS[key].html}
               <div class="dda-event-detail-actions">
                 <a
-                  href="/events/event.html?slug=${encodeURIComponent(EVENTS[key].slug)}"
+                  href="./event.html?slug=${encodeURIComponent(EVENTS[key].slug)}"
                   class="dda-event-detail-link"
                 >
                   Open full event page

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event — Blind Duck Dating</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./style.css" />
+  <script src="./components/header.js" defer></script>
+  <script src="./components/footer.js" defer></script>
+  <script src="./js/events-data.js"></script>
+</head>
+
+<body data-page="events">
+
+  <duck-header></duck-header>
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 grid-bg opacity-40 pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto px-6 pt-16 pb-12 md:pt-20 md:pb-14 relative">
+      <div id="event-top-badge" class="inline-flex items-center gap-2 bg-white border border-black/10 rounded-full px-4 py-2 text-sm font-bold sticker mb-6">
+        <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
+        EVENT
+      </div>
+
+      <h1 id="event-title" class="text-4xl md:text-6xl font-black tracking-tight leading-[0.95] max-w-4xl">
+        Event
+      </h1>
+
+      <div id="event-meta" class="mt-6 flex flex-wrap gap-3"></div>
+    </div>
+  </section>
+
+  <!-- CONTENT -->
+  <main class="pb-20 px-4">
+    <div class="max-w-5xl mx-auto">
+      <div id="event-card" class="dda-single-event-card">
+        <div class="dda-single-event-head">
+          <div class="dda-single-event-head-left">
+            <p id="event-type" class="dda-single-event-kicker">EVENT</p>
+            <h2 id="event-name-2" class="dda-single-event-heading">Event Name</h2>
+            <p id="event-description" class="dda-single-event-description"></p>
+          </div>
+
+          <div class="dda-single-event-logo-wrap">
+            <img id="event-logo" class="dda-single-event-logo" src="" alt="">
+          </div>
+        </div>
+
+        <div class="dda-single-event-info-grid">
+          <div class="dda-single-event-info-box">
+            <span class="dda-single-event-info-label">Date</span>
+            <strong id="event-date-text"></strong>
+          </div>
+
+          <div class="dda-single-event-info-box">
+            <span class="dda-single-event-info-label">Location</span>
+            <strong id="event-location"></strong>
+          </div>
+
+          <div class="dda-single-event-info-box">
+            <span class="dda-single-event-info-label">Frequency</span>
+            <strong id="event-frequency"></strong>
+          </div>
+
+          <div class="dda-single-event-info-box">
+            <span class="dda-single-event-info-label">Status</span>
+            <strong id="event-badge-text"></strong>
+          </div>
+        </div>
+
+        <div id="event-deadline-wrap" class="dda-single-event-deadline" style="display:none;">
+          <strong>Important:</strong>
+          <span id="event-deadline"></span>
+        </div>
+
+        <div class="dda-single-event-actions">
+          <a id="event-apply-btn" class="dda-single-event-btn" href="#" target="_blank" rel="noopener noreferrer">
+            Apply / Open event
+          </a>
+
+          <a class="dda-single-event-link" href="./events.html">
+            Back to all events
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <duck-footer></duck-footer>
+
+  <script>
+    (function () {
+      const events = Array.isArray(window.DDA_EVENTS) ? window.DDA_EVENTS : [];
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get("slug");
+
+      const event = events.find(item => item.slug === slug);
+
+      const titleEl = document.getElementById("event-title");
+      const name2El = document.getElementById("event-name-2");
+      const typeEl = document.getElementById("event-type");
+      const descEl = document.getElementById("event-description");
+      const dateEl = document.getElementById("event-date-text");
+      const locationEl = document.getElementById("event-location");
+      const frequencyEl = document.getElementById("event-frequency");
+      const badgeTextEl = document.getElementById("event-badge-text");
+      const logoEl = document.getElementById("event-logo");
+      const applyBtnEl = document.getElementById("event-apply-btn");
+      const metaEl = document.getElementById("event-meta");
+      const cardEl = document.getElementById("event-card");
+      const deadlineWrapEl = document.getElementById("event-deadline-wrap");
+      const deadlineEl = document.getElementById("event-deadline");
+
+      function escapeHtml(str) {
+        return String(str || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      if (!event) {
+        document.title = "Event not found — Blind Duck Dating";
+        titleEl.textContent = "Event not found";
+        name2El.textContent = "Sorry, we couldn’t find that event.";
+        descEl.textContent = "The link may be outdated or the event may have been removed.";
+        metaEl.innerHTML = `
+          <span class="dda-meta-pill">Please return to the event list</span>
+        `;
+        cardEl.style.background = "#ffffff";
+        applyBtnEl.href = "./events.html";
+        applyBtnEl.removeAttribute("target");
+        applyBtnEl.textContent = "Back to events";
+        return;
+      }
+
+      document.title = `${event.name} — Blind Duck Dating`;
+
+      titleEl.textContent = event.name;
+      name2El.textContent = event.name;
+      typeEl.textContent = (event.shortName || "EVENT").toUpperCase();
+      descEl.textContent = event.shortDescription || "";
+      dateEl.textContent = event.dateText || "";
+      locationEl.textContent = event.location || "";
+      frequencyEl.textContent = event.frequency || "";
+      badgeTextEl.textContent = event.badge || "";
+      logoEl.src = event.logo || "";
+      logoEl.alt = event.logoAlt || event.name || "Event logo";
+      applyBtnEl.href = event.applicationUrl || event.externalUrl || "#";
+      applyBtnEl.textContent = event.ctaText || "Open event";
+
+      cardEl.style.background = event.cardBg || "#ffffff";
+
+      metaEl.innerHTML = `
+        <span class="dda-meta-pill">${escapeHtml(event.dateText || "")}</span>
+        <span class="dda-meta-pill">${escapeHtml(event.location || "")}</span>
+        <span class="dda-meta-pill">${escapeHtml(event.frequency || "")}</span>
+      `;
+
+      if (event.deadlineText) {
+        deadlineWrapEl.style.display = "flex";
+        deadlineEl.textContent = event.deadlineText;
+      }
+    })();
+  </script>
+
+</body>
+</html>
