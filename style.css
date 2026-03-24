@@ -49,3 +49,373 @@ body {
 .cta-shadow {
   box-shadow: 0 14px 30px rgba(0,0,0,0.12);
 }
+
+
+/* EVENTS CSS */ 
+
+/* =========================
+   EVENTS PAGE
+========================= */
+
+.dda-event-list-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.dda-event-empty {
+  background: #ffffff;
+  border: 1px solid rgba(47, 47, 47, 0.1);
+  border-radius: 2rem;
+  padding: 1.5rem;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+}
+
+.dda-event-card {
+  position: relative;
+  display: block;
+  border-radius: 2rem;
+  padding: 1.5rem 1.5rem 1.75rem;
+  border: 1px solid rgba(47, 47, 47, 0.1);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  color: #2f2f2f;
+  text-decoration: none;
+}
+
+.dda-event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+}
+
+.dda-event-card-inner {
+  position: relative;
+  z-index: 1;
+  padding-right: 4rem;
+}
+
+.dda-event-card-logo {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 3rem;
+  height: 3rem;
+  object-fit: contain;
+}
+
+.dda-event-card-badge {
+  position: absolute;
+  top: 4.5rem;
+  right: 1rem;
+  z-index: 2;
+  max-width: 12rem;
+  background: #ff5b92;
+  color: #ffffff;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  line-height: 1.15;
+  text-align: center;
+  border: 1px solid rgba(47, 47, 47, 0.1);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  transform: rotate(8deg);
+}
+
+.dda-event-card-meta {
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #ff5b92;
+  margin: 0;
+}
+
+.dda-event-card-title {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  font-size: 1.75rem;
+  line-height: 1.05;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.dda-event-card-text {
+  margin-top: 0.85rem;
+  margin-bottom: 0;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: rgba(47, 47, 47, 0.75);
+}
+
+.dda-event-card-bottom {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: center;
+}
+
+.dda-event-card-link {
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.dda-event-card-date {
+  font-size: 0.92rem;
+  font-style: italic;
+  color: rgba(47, 47, 47, 0.72);
+}
+
+/* =========================
+   CALENDAR
+========================= */
+
+.dda-cal-card {
+  background: #ffffff;
+  border-radius: 2rem;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid rgba(47, 47, 47, 0.08);
+}
+
+.dda-cal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.95rem 1rem;
+  background: linear-gradient(135deg, #ffd36e 0%, #ffb14a 45%, #ff8b4e 100%);
+}
+
+.dda-cal-title {
+  font-size: 1.125rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #2f2f2f;
+}
+
+.dda-cal-actions {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.dda-cal-btn {
+  border: none;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.92);
+  color: #2f2f2f;
+  border-radius: 999px;
+  padding: 0.55rem 0.85rem;
+  font-weight: 800;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.dda-cal-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-1px);
+}
+
+.dda-cal-body {
+  padding: 0.9rem 0.9rem 1rem;
+}
+
+.dda-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.dda-cal-grid-weekdays {
+  margin-bottom: 0.35rem;
+}
+
+.dda-cal-grid-days {
+  margin-bottom: 0.75rem;
+}
+
+.dda-cal-weekday {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: rgba(47, 47, 47, 0.7);
+  padding: 0.35rem 0;
+}
+
+.dda-cal-cell {
+  border: 1px solid rgba(47, 47, 47, 0.12);
+  border-radius: 0.95rem;
+  min-height: 4.25rem;
+  background: #f8f4ee;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, border-color 0.08s ease;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.dda-cal-cell:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 154, 60, 0.5);
+}
+
+.dda-cal-cell--blank {
+  background: transparent;
+  border: none;
+  cursor: default;
+  box-shadow: none;
+}
+
+.dda-cal-cell--blank:hover {
+  transform: none;
+  box-shadow: none;
+  border: none;
+}
+
+.dda-cal-cell--today {
+  border-color: rgba(47, 47, 47, 0.45);
+  background: #ffffff;
+}
+
+.dda-cal-cell--selected {
+  outline: 3px solid rgba(255, 91, 146, 0.35);
+  background: #ffffff;
+}
+
+.dda-cal-cell--has-event {
+  background: #fff9f2;
+}
+
+.dda-cal-daynum {
+  font-weight: 800;
+  color: #2f2f2f;
+}
+
+.dda-event-badge {
+  display: inline-block;
+  margin-top: 0.4rem;
+  padding: 0.28rem 0.45rem;
+  background: #ffefdc;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #2f2f2f;
+  border: 1px solid rgba(47, 47, 47, 0.06);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dda-cal-footer {
+  margin-top: 0.5rem;
+  text-align: left;
+  font-size: 0.95rem;
+  color: rgba(47, 47, 47, 0.75);
+}
+
+.dda-event-detail {
+  background: #fff8f2;
+  border: 1px solid rgba(47, 47, 47, 0.06);
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.dda-event-detail-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 900;
+  line-height: 1.1;
+  color: #2f2f2f;
+}
+
+.dda-event-detail-deadline {
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.dda-event-detail-actions {
+  margin-top: 1rem;
+}
+
+.dda-event-detail-link {
+  display: inline-block;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: #2f2f2f;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .dda-event-list-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .dda-event-card {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+
+  .dda-event-card-inner {
+    padding-right: 0;
+  }
+
+  .dda-event-card-logo {
+    width: 2.75rem;
+    height: 2.75rem;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .dda-event-card-badge {
+    position: static;
+    transform: rotate(0deg);
+    max-width: none;
+    display: inline-block;
+    margin-top: 0.9rem;
+  }
+
+  .dda-event-card-title {
+    font-size: 1.5rem;
+    padding-right: 2.5rem;
+  }
+
+  .dda-event-card-text {
+    font-size: 1rem;
+  }
+
+  .dda-cal-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dda-cal-title {
+    text-align: center;
+  }
+
+  .dda-cal-actions {
+    justify-content: center;
+  }
+
+  .dda-cal-cell {
+    min-height: 3.8rem;
+    padding: 0.45rem;
+  }
+
+  .dda-event-badge {
+    font-size: 0.62rem;
+    padding: 0.22rem 0.38rem;
+  }
+}

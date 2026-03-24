@@ -10,9 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/style.css" />
   <script src="/components/header.js" defer></script>
   <script src="/components/footer.js" defer></script>
+  <script src="/js/events-data.js"></script>
 </head>
 
 <body data-page="events">
@@ -34,7 +35,7 @@
       </h1>
 
       <p class="mt-6 text-lg md:text-2xl text-black/70 max-w-3xl mx-auto">
-        Upcoming speed dating events will appear here.
+        Explore upcoming events, open a dedicated event page, and jump straight to the application link.
       </p>
     </div>
   </section>
@@ -42,282 +43,317 @@
   <!-- CONTENT -->
   <main class="pb-20 px-4">
     <div class="max-w-6xl mx-auto">
-      <div id="dda-calendar"></div>
+
+      <!-- EVENT LIST -->
+      <section class="mb-10">
+        <div class="inline-flex items-center gap-2 bg-white border border-black/10 rounded-full px-4 py-2 text-sm font-bold sticker mb-6">
+          <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
+          ALL EVENTS
+        </div>
+
+        <div id="dda-event-list" class="dda-event-list-grid"></div>
+      </section>
+
+      <!-- CALENDAR -->
+      <section>
+        <div class="inline-flex items-center gap-2 bg-white border border-black/10 rounded-full px-4 py-2 text-sm font-bold sticker mb-6">
+          <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
+          EVENT CALENDAR
+        </div>
+
+        <div id="dda-calendar"></div>
+      </section>
+
     </div>
   </main>
 
   <duck-footer></duck-footer>
 
   <script>
-  (function () {
-    const MONTHS = [
-      "January","February","March","April","May","June",
-      "July","August","September","October","November","December"
-    ];
-    const WEEKDAYS = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+(function () {
+  const RAW_EVENTS = Array.isArray(window.DDA_EVENTS) ? window.DDA_EVENTS : [];
 
-    function pad2(n) { return String(n).padStart(2, "0"); }
-    function ymd(d) { return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`; }
-    function startOfMonth(date) { return new Date(date.getFullYear(), date.getMonth(), 1); }
-    function endOfMonth(date) { return new Date(date.getFullYear(), date.getMonth() + 1, 0); }
-    function mondayFirstDayIndex(jsDay) { return (jsDay + 6) % 7; }
+  
+  const MONTHS = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
 
-    const EVENTS = {
-      "2026-04-04": {
+  const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+  function pad2(n) {
+    return String(n).padStart(2, "0");
+  }
+
+  function ymd(d) {
+    return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+  }
+
+  function startOfMonth(date) {
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  }
+
+  function endOfMonth(date) {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  }
+
+  function mondayFirstDayIndex(jsDay) {
+    return (jsDay + 6) % 7;
+  }
+
+  function escapeHtml(str) {
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  const EVENTS = Object.fromEntries(
+    RAW_EVENTS.map(event => [
+      event.date,
+      {
+        slug: event.slug,
+        name: event.name,
+        dateText: event.dateText,
+        label: event.shortName || event.name,
+        location: event.location,
+        frequency: event.frequency,
+        shortDescription: event.shortDescription,
+        applicationUrl: event.applicationUrl,
+        externalUrl: event.externalUrl,
+        cardBg: event.cardBg,
+        deadlineText: event.deadlineText,
         html: `
-          <p>Curated face-to-face meeting with 8 people. We make sure to connect you to like-minded individuals with similar interests. Ongoing events every few weeks. Free registry.</p>
-          <span class="mt-6 inline-block font-bold underline underline-offset-4">Register to the Dating Pool</span>
-          <span><i>
-            <br>
-            <span><i class="text-sm italic">Deadline <span class="inline-block">4<sup class="text-xxs">th</sup> April 2026</span></i></span>
-          </i></span>
-        `,
-        label: "Curated meeting"
+          <h3 class="dda-event-detail-title">${escapeHtml(event.name)}</h3>
+          <p>${escapeHtml(event.shortDescription || "")}</p>
+          ${event.deadlineText ? `<p class="dda-event-detail-deadline">${escapeHtml(event.deadlineText)}</p>` : ""}
+        `
       }
-    };
+    ])
+  );
 
-    function createCalendar(container) {
-      const state = { current: new Date(), selected: null };
+  function getInitialCalendarDate() {
+    if (!RAW_EVENTS.length) return new Date();
 
-      container.innerHTML = `
-        <style>
-          .dda-cal-card{
-            background:#fff;
-            border-radius:32px;
-            box-shadow:0 14px 30px rgba(0,0,0,.10);
-            overflow:hidden;
-            border:1px solid rgba(47,47,47,.08);
-          }
-          .dda-cal-header{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:14px 16px;
-            background:linear-gradient(135deg,#ffd36e 0%, #ffb14a 45%, #ff8b4e 100%);
-            gap:10px;
-            flex-wrap:wrap;
-          }
-          .dda-cal-title{
-            font-weight:900;
-            color:#2F2F2F;
-            font-size:18px;
-            letter-spacing:-0.02em;
-          }
-          .dda-cal-actions{
-            display:flex;
-            gap:10px;
-            flex-wrap:wrap;
-          }
-          .dda-cal-btn{
-            border:none;
-            cursor:pointer;
-            background:rgba(255,255,255,.92);
-            color:#2F2F2F;
-            border-radius:999px;
-            padding:8px 12px;
-            font-weight:800;
-          }
-          .dda-cal-btn:hover{
-            background:rgba(255,255,255,1);
-          }
-          .dda-cal-body{
-            padding:12px 12px 16px;
-          }
-          .dda-cal-grid{
-            display:grid;
-            grid-template-columns:repeat(7,1fr);
-            gap:8px;
-          }
-          .dda-cal-weekday{
-            text-align:center;
-            font-size:12px;
-            font-weight:800;
-            color:rgba(47,47,47,.70);
-            padding:6px 0;
-          }
-          .dda-cal-cell{
-            border:1px solid rgba(47,47,47,.12);
-            border-radius:14px;
-            min-height:54px;
-            background:#f8f4ee;
-            padding:8px;
-            cursor:pointer;
-            transition:transform .08s ease, box-shadow .08s ease, border-color .08s ease;
-            text-align:left;
-            position:relative;
-            overflow:hidden;
-          }
-          .dda-cal-cell:hover{
-            transform:translateY(-1px);
-            box-shadow:0 8px 16px rgba(0,0,0,.10);
-            border-color:rgba(255,154,60,.5);
-          }
-          .dda-cal-cell--blank{
-            background:transparent;
-            border:none;
-            cursor:default;
-          }
-          .dda-cal-cell--today{
-            border-color:rgba(47,47,47,.45);
-            background:#fff;
-          }
-          .dda-cal-cell--selected{
-            outline:3px solid rgba(255,91,146,.35);
-            background:#fff;
-          }
-          .dda-cal-daynum{
-            font-weight:800;
-            color:#2F2F2F;
-          }
-          .dda-event-badge{
-            display:inline-block;
-            margin-top:6px;
-            padding:4px 6px;
-            background:#ffefdc;
-            border-radius:999px;
-            font-size:11px;
-            font-weight:800;
-            color:#2f2f2f;
-            border:1px solid rgba(47,47,47,.06);
-          }
-          .dda-cal-footer{
-            margin-top:12px;
-            text-align:left;
-            font-size:14px;
-            color:rgba(47,47,47,.75);
-          }
-          .dda-event-detail{
-            background:#fff8f2;
-            border:1px solid rgba(47,47,47,.06);
-            padding:12px;
-            border-radius:12px;
-          }
+    const sorted = [...RAW_EVENTS].sort((a, b) => a.date.localeCompare(b.date));
+    const first = sorted[0];
+    const parts = first.date.split("-").map(Number);
 
-          @media (max-width: 640px) {
-            .dda-cal-header{
-              flex-direction:column;
-              align-items:stretch;
-            }
-            .dda-cal-title{
-              text-align:center;
-            }
-            .dda-cal-actions{
-              justify-content:center;
-            }
-          }
-        </style>
+    if (parts.length !== 3) return new Date();
 
-        <div class="dda-cal-card">
-          <div class="dda-cal-header">
-            <div class="dda-cal-title" id="dda-cal-title"></div>
-            <div class="dda-cal-actions">
-              <button class="dda-cal-btn" id="dda-cal-prev">← Prev</button>
-              <button class="dda-cal-btn" id="dda-cal-today">Today</button>
-              <button class="dda-cal-btn" id="dda-cal-next">Next →</button>
-            </div>
-          </div>
+    return new Date(parts[0], parts[1] - 1, parts[2]);
+  }
 
-          <div class="dda-cal-body">
-            <div class="dda-cal-grid" id="dda-cal-weekdays"></div>
-            <div class="dda-cal-grid" id="dda-cal-days"></div>
-            <div class="dda-cal-footer" id="dda-cal-footer">Click a day to select it.</div>
-          </div>
+  function renderEventList() {
+    const listEl = document.getElementById("dda-event-list");
+    if (!listEl) return;
+
+    const events = [...RAW_EVENTS].sort((a, b) => a.date.localeCompare(b.date));
+
+    if (!events.length) {
+      listEl.innerHTML = `
+        <div class="dda-event-empty">
+          <p>No upcoming events yet.</p>
         </div>
       `;
+      return;
+    }
 
-      const elTitle = container.querySelector("#dda-cal-title");
-      const elWeekdays = container.querySelector("#dda-cal-weekdays");
-      const elDays = container.querySelector("#dda-cal-days");
-      const elFooter = container.querySelector("#dda-cal-footer");
+    listEl.innerHTML = events.map(event => `
+      <a
+        href="/events/event.html?slug=${encodeURIComponent(event.slug)}"
+        class="dda-event-card"
+        style="background:${event.cardBg || "#ffffff"};"
+      >
+        <img
+          src="${event.logo}"
+          alt="${escapeHtml(event.logoAlt || event.name)}"
+          class="dda-event-card-logo"
+        />
 
-      const btnPrev = container.querySelector("#dda-cal-prev");
-      const btnNext = container.querySelector("#dda-cal-next");
-      const btnToday = container.querySelector("#dda-cal-today");
+        ${event.badge ? `
+          <div class="dda-event-card-badge">
+            ${escapeHtml(event.badge)}
+          </div>
+        ` : ""}
 
-      elWeekdays.innerHTML = WEEKDAYS.map(d => `<div class="dda-cal-weekday">${d}</div>`).join("");
+        <div class="dda-event-card-inner">
+          <p class="dda-event-card-meta">
+            📍 ${escapeHtml(event.location || "")}
+            ${event.frequency ? `&nbsp;&nbsp;|&nbsp;&nbsp; ⏲ ${escapeHtml(event.frequency)}` : ""}
+          </p>
 
-      function render() {
-        const viewDate = state.current;
-        const monthStart = startOfMonth(viewDate);
-        const monthEnd = endOfMonth(viewDate);
+          <h3 class="dda-event-card-title">${escapeHtml(event.name)}</h3>
 
-        elTitle.textContent = `${MONTHS[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
+          <p class="dda-event-card-text">${escapeHtml(event.shortDescription || "")}</p>
 
-        const lead = mondayFirstDayIndex(monthStart.getDay());
-        const daysInMonth = monthEnd.getDate();
+          <div class="dda-event-card-bottom">
+            <span class="dda-event-card-link">Open event page</span>
+            <span class="dda-event-card-date">${escapeHtml(event.dateText || event.date)}</span>
+          </div>
+        </div>
+      </a>
+    `).join("");
+  }
 
-        const cells = [];
-        for (let i = 0; i < lead; i++) cells.push({ type: "blank" });
-        for (let day = 1; day <= daysInMonth; day++) {
-          cells.push({ type: "day", date: new Date(viewDate.getFullYear(), viewDate.getMonth(), day) });
-        }
-        const trail = (7 - (cells.length % 7)) % 7;
-        for (let i = 0; i < trail; i++) cells.push({ type: "blank" });
+  function createCalendar(container) {
+    const state = {
+      current: getInitialCalendarDate(),
+      selected: null
+    };
 
-        const todayKey = ymd(new Date());
+    container.innerHTML = `
+      <div class="dda-cal-card">
+        <div class="dda-cal-header">
+          <div class="dda-cal-title" id="dda-cal-title"></div>
 
-        elDays.innerHTML = cells.map(c => {
-          if (c.type === "blank") return `<div class="dda-cal-cell dda-cal-cell--blank"></div>`;
+          <div class="dda-cal-actions">
+            <button class="dda-cal-btn" id="dda-cal-prev" type="button">← Prev</button>
+            <button class="dda-cal-btn" id="dda-cal-today" type="button">Today</button>
+            <button class="dda-cal-btn" id="dda-cal-next" type="button">Next →</button>
+          </div>
+        </div>
 
-          const key = ymd(c.date);
-          const isToday = key === todayKey;
-          const isSelected = state.selected && ymd(state.selected) === key;
-          const ev = EVENTS[key];
+        <div class="dda-cal-body">
+          <div class="dda-cal-grid dda-cal-grid-weekdays" id="dda-cal-weekdays"></div>
+          <div class="dda-cal-grid dda-cal-grid-days" id="dda-cal-days"></div>
+          <div class="dda-cal-footer" id="dda-cal-footer">Click a day to select it.</div>
+        </div>
+      </div>
+    `;
 
-          const cls = [
-            "dda-cal-cell",
-            isToday ? "dda-cal-cell--today" : "",
-            isSelected ? "dda-cal-cell--selected" : "",
-          ].filter(Boolean).join(" ");
+    const elTitle = container.querySelector("#dda-cal-title");
+    const elWeekdays = container.querySelector("#dda-cal-weekdays");
+    const elDays = container.querySelector("#dda-cal-days");
+    const elFooter = container.querySelector("#dda-cal-footer");
 
-          const badge = ev ? `<div class="dda-event-badge" title="${ev.label}">${ev.label}</div>` : "";
+    const btnPrev = container.querySelector("#dda-cal-prev");
+    const btnNext = container.querySelector("#dda-cal-next");
+    const btnToday = container.querySelector("#dda-cal-today");
 
-          return `
-            <button class="${cls}" type="button" data-date="${key}">
-              <div class="dda-cal-daynum">${c.date.getDate()}</div>
-              ${badge}
-            </button>
-          `;
-        }).join("");
+    elWeekdays.innerHTML = WEEKDAYS.map(day => `
+      <div class="dda-cal-weekday">${day}</div>
+    `).join("");
 
-        if (state.selected) {
-          const key = ymd(state.selected);
-          if (EVENTS[key]) {
-            elFooter.innerHTML = `<div class="dda-event-detail">${EVENTS[key].html}</div>`;
-          } else {
-            elFooter.textContent = "Selected: " + ymd(state.selected);
-          }
-        } else {
-          elFooter.textContent = "Click a day to select it.";
-        }
+    function render() {
+      const viewDate = state.current;
+      const monthStart = startOfMonth(viewDate);
+      const monthEnd = endOfMonth(viewDate);
+
+      elTitle.textContent = `${MONTHS[viewDate.getMonth()]} ${viewDate.getFullYear()}`;
+
+      const lead = mondayFirstDayIndex(monthStart.getDay());
+      const daysInMonth = monthEnd.getDate();
+
+      const cells = [];
+
+      for (let i = 0; i < lead; i++) {
+        cells.push({ type: "blank" });
       }
 
-      btnPrev.addEventListener("click", () => {
-        state.current = new Date(state.current.getFullYear(), state.current.getMonth() - 1, 1);
-        render();
-      });
+      for (let day = 1; day <= daysInMonth; day++) {
+        cells.push({
+          type: "day",
+          date: new Date(viewDate.getFullYear(), viewDate.getMonth(), day)
+        });
+      }
 
-      btnNext.addEventListener("click", () => {
-        state.current = new Date(state.current.getFullYear(), state.current.getMonth() + 1, 1);
-        render();
-      });
+      const trail = (7 - (cells.length % 7)) % 7;
+      for (let i = 0; i < trail; i++) {
+        cells.push({ type: "blank" });
+      }
 
-      btnToday.addEventListener("click", () => {
-        state.current = new Date();
-        state.selected = null;
-        render();
-      });
+      const todayKey = ymd(new Date());
 
-      container.addEventListener("click", (e) => {
-        const btn = e.target.closest("button[data-date]");
-        if (!btn) return;
-        const [Y, M, D] = btn.dataset.date.split("-").map(Number);
-        state.selected = new Date(Y, M - 1, D);
-        render();
-      });
+      elDays.innerHTML = cells.map(cell => {
+        if (cell.type === "blank") {
+          return `<div class="dda-cal-cell dda-cal-cell--blank"></div>`;
+        }
 
-      render();
+        const key = ymd(cell.date);
+        const isToday = key === todayKey;
+        const isSelected = state.selected && ymd(state.selected) === key;
+        const ev = EVENTS[key];
+
+        const cls = [
+          "dda-cal-cell",
+          isToday ? "dda-cal-cell--today" : "",
+          isSelected ? "dda-cal-cell--selected" : "",
+          ev ? "dda-cal-cell--has-event" : ""
+        ].filter(Boolean).join(" ");
+
+ 
+          const badge = ev
+  ? `<div class="dda-event-badge">${escapeHtml(ev.name)}</div>`
+  : "";
+
+    const style = ev ? `style="background:${escapeHtml(ev.cardBg || "#fff9f2")};"` : "";
+
+return `
+  <button class="${cls}" type="button" data-date="${key}" ${style}>
+    <div class="dda-cal-daynum">${cell.date.getDate()}</div>
+    ${badge}
+  </button>
+`;
+      }).join("");
+
+      if (state.selected) {
+        const key = ymd(state.selected);
+
+        if (EVENTS[key]) {
+          elFooter.innerHTML = `
+            <div class="dda-event-detail">
+              ${EVENTS[key].html}
+              <div class="dda-event-detail-actions">
+                <a
+                  href="/events/event.html?slug=${encodeURIComponent(EVENTS[key].slug)}"
+                  class="dda-event-detail-link"
+                >
+                  Open full event page
+                </a>
+              </div>
+            </div>
+          `;
+        } else {
+          elFooter.textContent = "Selected: " + ymd(state.selected);
+        }
+      } else {
+        elFooter.textContent = "Click a day to select it.";
+      }
     }
+
+    btnPrev.addEventListener("click", function () {
+      state.current = new Date(state.current.getFullYear(), state.current.getMonth() - 1, 1);
+      render();
+    });
+
+    btnNext.addEventListener("click", function () {
+      state.current = new Date(state.current.getFullYear(), state.current.getMonth() + 1, 1);
+      render();
+    });
+
+    btnToday.addEventListener("click", function () {
+      state.current = new Date();
+      state.selected = null;
+      render();
+    });
+
+    container.addEventListener("click", function (e) {
+      const btn = e.target.closest("button[data-date]");
+      if (!btn) return;
+
+      const parts = btn.dataset.date.split("-").map(Number);
+      state.selected = new Date(parts[0], parts[1] - 1, parts[2]);
+      render();
+    });
+
+    render();
+  }
+
+  function initEventsPage() {
+    renderEventList();
 
     const mount = document.getElementById("dda-calendar");
     if (!mount) {
@@ -326,8 +362,15 @@
     }
 
     createCalendar(mount);
-  })();
-  </script>
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initEventsPage);
+  } else {
+    initEventsPage();
+  }
+})();
+</script>
 
 </body>
 </html>
