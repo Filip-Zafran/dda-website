@@ -15,7 +15,7 @@ class DuckHeader extends HTMLElement {
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
           <a href="/index.html" class="flex items-center gap-3 min-w-0">
             <div class="w-12 h-12 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-black/10 bg-pink-200 shrink-0">
-              <img src="/images/DDA-logo.jpg" alt="Blind Duck Dating logo" class="w-full h-full object-cover">
+              <img src="/images/BDD-logo.png" alt="Blind Duck Dating logo" class="w-full h-full object-cover">
             </div>
             <div class="min-w-0">
               <div class="text-lg sm:text-xl md:text-3xl font-black tracking-tight leading-none truncate">DUCK DATING</div>
