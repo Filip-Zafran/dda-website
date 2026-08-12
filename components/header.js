@@ -154,6 +154,25 @@ class DuckHeader extends HTMLElement {
 
     window.addEventListener("scroll", setCompactHeader, { passive: true });
     setCompactHeader();
+
+    // The shared header appears on every public page, so each page load is
+    // recorded once. The Contact page listens for this event to show totals.
+    fetch("/api/visits", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+      cache: "no-store",
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Visit counter request failed");
+        return response.json();
+      })
+      .then((counts) => {
+        window.dispatchEvent(
+          new CustomEvent("visit-counts-updated", { detail: counts }),
+        );
+      })
+      .catch((error) => console.warn(error.message));
   }
 }
 

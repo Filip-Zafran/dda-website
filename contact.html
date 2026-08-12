@@ -107,6 +107,23 @@
             contact us. We take boundaries seriously.
           </p>
         </div>
+
+        <div class="bg-[#ffd36e] rounded-[2rem] shadow-md p-8 border border-black/10">
+          <h3 class="text-xl font-black text-[#2f2f2f] mb-5">Website visits</h3>
+          <div class="grid grid-cols-2 gap-4" aria-live="polite">
+            <div class="rounded-2xl bg-white/70 p-4">
+              <p id="website-visits" class="text-3xl font-black text-[#2f2f2f]">—</p>
+              <p class="mt-1 text-sm font-semibold text-black/60">Website visits</p>
+            </div>
+            <div class="rounded-2xl bg-white/70 p-4">
+              <p id="unique-visits" class="text-3xl font-black text-[#2f2f2f]">—</p>
+              <p class="mt-1 text-sm font-semibold text-black/60">Unique visits</p>
+            </div>
+          </div>
+          <p class="mt-4 text-xs text-black/55">
+            Unique visits are estimated using a privacy-protected hash of the visitor's IP address. Raw IP addresses are not stored.
+          </p>
+        </div>
       </aside>
 
       <!-- MAILING LIST FORM -->
@@ -231,6 +248,12 @@
 
   <script>
     feather.replace();
+
+    window.addEventListener("visit-counts-updated", (event) => {
+      const numberFormat = new Intl.NumberFormat();
+      document.getElementById("website-visits").textContent = numberFormat.format(event.detail.total);
+      document.getElementById("unique-visits").textContent = numberFormat.format(event.detail.unique);
+    });
   </script>
 </body>
 </html>

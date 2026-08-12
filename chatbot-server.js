@@ -2,12 +2,24 @@ import Anthropic from "@anthropic-ai/sdk";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { createHmac } from "node:crypto";
+import { getVisitCounts, recordVisit } from "./db.js";
 
 dotenv.config();
 
 const app = express();
+app.set("trust proxy", Number(process.env.TRUST_PROXY_HOPS || 1));
 app.use(express.json());
 app.use(cors());
+
+const visitorHashSalt =
+  process.env.VISITOR_HASH_SALT || "duck-dating-apps-development-salt";
+
+if (!process.env.VISITOR_HASH_SALT) {
+  console.warn(
+    "VISITOR_HASH_SALT is not set. Set a long random value in production so visitor hashes remain private.",
+  );
+}
 
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -62,6 +74,34 @@ A: Check our calendar on the website or ask me about our current events! Blind D
 - If someone asks something you don't know, be honest and suggest they check the website or reach out
 
 **Brand voice:** Friendly, inclusive, non-judgmental, fun but genuine.`;
+
+function hashVisitorIp(ipAddress) {
+  return createHmac("sha256", visitorHashSalt)
+    .update(ipAddress || "unknown")
+    .digest("hex");
+}
+
+app.post("/api/visits", async (req, res) => {
+  try {
+    const counts = await recordVisit(hashVisitorIp(req.ip));
+    res.set("Cache-Control", "no-store");
+    res.json(counts);
+  } catch (error) {
+    console.error("Visit counter error:", error);
+    res.status(500).json({ error: "Failed to update visit counter" });
+  }
+});
+
+app.get("/api/visits", async (_req, res) => {
+  try {
+    const counts = await getVisitCounts();
+    res.set("Cache-Control", "no-store");
+    res.json(counts);
+  } catch (error) {
+    console.error("Visit counter error:", error);
+    res.status(500).json({ error: "Failed to load visit counter" });
+  }
+});
 
 app.post("/api/chat", async (req, res) => {
   try {
